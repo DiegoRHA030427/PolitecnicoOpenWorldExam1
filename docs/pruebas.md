@@ -41,7 +41,7 @@
 | Expected | The field shows `Diego` unchanged and the map loads. |
 | Actual | The field showed `Diego`; the map loaded. |
 | Status | ✅ Passed |
-| Evidence | Observed during the emulator run |
+| Evidence | Observed during the emulator run · [Map](evidencias/cp01_mapa_diego.png) |
 | Defect | — |
 | Decision | Accept |
 
@@ -69,7 +69,7 @@
 | Expected | The map loads and a `Jugador_XXXX` name is generated and saved. |
 | Actual | The map loaded; the dialog then showed `Jugador_5237`. |
 | Status | ✅ Passed |
-| Evidence | Observed during the emulator run |
+| Evidence | Observed during the emulator run · [Empty field](evidencias/cp03_campo_vacio.png), [Map](evidencias/cp03_mapa_fallback.png), [Saved name](evidencias/cp03_nombre_guardado.png) |
 | Defect | — |
 | Decision | Accept |
 
@@ -83,7 +83,7 @@
 | Expected | The dialog shows the saved name `Diego`. |
 | Actual | The dialog showed `Diego` in landscape. |
 | Status | ✅ Passed |
-| Evidence | Observed during the emulator run |
+| Evidence | Observed during the emulator run · [Dialog](evidencias/cp04_dialogo_landscape.png) |
 | Defect | — |
 | Decision | Accept |
 
@@ -97,7 +97,7 @@
 | Expected | The field stops at 16 and the full name is visible. |
 | Actual | The field showed `Jugador_5237asdf` (16) completely; the dialog did not break. |
 | Status | ✅ Passed |
-| Evidence | Observed during the emulator run |
+| Evidence | Observed during the emulator run · [Empty field](evidencias/cp05_fuente_grande_vacio.png), [16 chars](evidencias/cp05_fuente_grande_16.png) |
 | Defect | — |
 | Decision | Accept |
 
