@@ -22,7 +22,7 @@ other players' screens.
 **In scope**
 
 - *Username* field of the *Connect to Server* dialog (`MainMenuScreen.kt`, `shared` module).
-- Input is capped at 16 characters while typing or pasting, and again when tapping *Connect*
+- Input is capped at 16 characters while typing, and again when tapping *Connect*
   (covers a long name that was already saved).
 - The `Jugador_XXXX` fallback name is kept when the field is left blank.
 
@@ -43,20 +43,40 @@ other players' screens.
 | Final delivered SHA | _Pending — declared when QA is closed._ |
 | App version | `1.0.0.18` |
 
-## 5. Test matrix
+## 5. Test environment
 
-_Pending — will be documented in `docs/pruebas.md`._
+| Item | Value |
+|---|---|
+| OS | Windows |
+| IDE | Android Studio (bundled JBR) |
+| Build | Gradle wrapper 9.5.0 · AGP 9.3.0 · Kotlin 2.3.21 · Java target 11 |
+| Android SDK | compileSdk 36 · targetSdk 36 · minSdk 24 |
+| Devices | Emulator *Medium Phone*, Android 17 (API 37), x86_64 · Physical Android phone |
+| Setup | Fork synced with upstream `main` at the base SHA; only the internal `PolitecnicoOpenWorld` folder opened in Android Studio; fictitious usernames only; `local.properties` not committed |
 
-## 6. Evidence: before and after
+## 6. Test matrix
 
-### 6.1 *Connect to Server* dialog
+Full matrix with steps, expected/actual results and evidence: **[docs/pruebas.md](docs/pruebas.md)**
+
+| Case | Type | Covers | Status |
+|---|---|---|---|
+| CP-01 | Happy path | AC1, R1 | ✅ Passed |
+| CP-02 | Boundary | AC2, R2 | ✅ Passed |
+| CP-03 | Regression (blank-name fallback) | R3 | ✅ Passed |
+| CP-04 | Navigation / state (Back, rotation) | — | ✅ Passed |
+| CP-05 | Accessibility (max font size) | R4 | ✅ Passed |
+| CP-06 | Compatibility (emulator vs phone) | — | ✅ Passed |
+
+## 7. Evidence: before and after (CP-02, CP-06)
+
+### 7.1 *Connect to Server* dialog
 
 | Before (base SHA `7ed32539`) | After (fix branch) |
 |---|---|
 | <img src="docs/evidencias/antes_dialogo.jpeg" width="260" alt="Before: the field accepts a name longer than 16 characters"> | <img src="docs/evidencias/despues_dialogo.jpeg" width="260" alt="After: the field stops at 16 characters"> |
 | The field accepts a name with no limit (`NoTieneLimiteNoTieneLimiteNoTiene…`). | The field stops at 16 characters (`YaEstaLimitadoYa`). |
 
-### 6.2 Name label on the map (seen by another player)
+### 7.2 Name label on the map (seen by another player)
 
 **Before:** the unlimited name is drawn as a strip across the whole screen,
 on top of the controls and the HUD.
@@ -69,19 +89,34 @@ on top of the controls and the HUD.
 
 <img src="docs/evidencias/despues_mapa.jpeg" width="600" alt="After: bounded YaEstaLimitadoYa label">
 
-## 7. Automated checks
+## 8. Automated checks
 
-_Pending._
+| Check | What it verifies | SHA | Status | Log |
+|---|---|---|---|---|
+| PR Quality Gate (GitHub Actions) | Unit tests, detekt static analysis | `fbcd55cd` | _Pending — not yet run on the PR_ | — |
+| Local Gradle run | `.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :shared:testAndroidHostTest --stacktrace` | `fbcd55cd` | _Pending_ | — |
 
-## 8. Peer review
+## 9. Peer review
 
-_Pending._
+| Role | Link | Status |
+|---|---|---|
+| Review received on my PR | [PR #167](https://github.com/gabrielhuav/PolitecnicoOpenWorld/pull/167) | _Pending_ |
+| Review I gave to a classmate | — | _Pending_ |
 
-## 9. Conclusions
+## 10. Conclusions
 
-_Pending._
+- The change meets both acceptance criteria: valid names are kept as typed and input stops at 16 characters.
+- 6 of 6 test cases passed on the emulator (API 37) and on a physical phone; no defects found within scope.
+- **Recommendation:** merge, once the automated checks pass.
+- **Remaining risks:**
+  - Pasting a long text into the field was not verified (out of scope for this change).
+  - Users with a saved name longer than 16 characters will see it truncated on their next *Connect*.
 
-## 10. References
+## 11. Individual log
+
+[docs/bitacora.md](docs/bitacora.md) — my commits, executed cases, peer review and AI tools used.
+
+## 12. References
 
 - [Upstream repository: gabrielhuav/PolitecnicoOpenWorld](https://github.com/gabrielhuav/PolitecnicoOpenWorld)
 - [Working fork: DiegoRHA030427/PolitecnicoOpenWorldExam1](https://github.com/DiegoRHA030427/PolitecnicoOpenWorldExam1)
