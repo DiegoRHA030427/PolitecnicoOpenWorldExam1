@@ -40,7 +40,6 @@ other players' screens.
 | Pull Request | [gabrielhuav/PolitecnicoOpenWorld#167](https://github.com/gabrielhuav/PolitecnicoOpenWorld/pull/167) |
 | Change branch | `fix/limit-multiplayer-username` |
 | Base SHA | [`7ed325393f82872c2be94ff2ada46948efa19152`](https://github.com/gabrielhuav/PolitecnicoOpenWorld/commit/7ed325393f82872c2be94ff2ada46948efa19152) |
-| Final delivered SHA | _Pending — declared when QA is closed._ |
 | App version | `1.0.0.18` |
 
 ## 5. Test environment
@@ -94,14 +93,14 @@ on top of the controls and the HUD.
 | Check | What it verifies | SHA | Status | Log |
 |---|---|---|---|---|
 | PR Quality Gate (GitHub Actions) | Unit tests, detekt static analysis | `fbcd55cd` | _Pending — not yet run on the PR_ | — |
-| Local Gradle run | `.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :shared:testAndroidHostTest --stacktrace` | `fbcd55cd` | _Pending_ | — |
+| Local Gradle run | `.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :shared:testAndroidHostTest --stacktrace` | `fbcd55cd` |
 
 ## 9. Peer review
 
 | Role | Link | Status |
 |---|---|---|
-| Review received on my PR | [PR #167](https://github.com/gabrielhuav/PolitecnicoOpenWorld/pull/167) | _Pending_ |
-| Review I gave to a classmate | — | _Pending_ |
+| Review received on my PR | [PR #167](https://github.com/gabrielhuav/PolitecnicoOpenWorld/pull/167) | By Julio Reyes Olascoaga |
+| Review I gave to a classmate | — | https://github.com/gabrielhuav/PolitecnicoOpenWorld/pull/156 |
 
 ## 10. Conclusions
 
