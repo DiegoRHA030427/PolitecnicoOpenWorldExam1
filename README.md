@@ -5,7 +5,7 @@ Delivery index for the Quality Assurance project on
 This document and the `docs/` folder live only on the academic branch `qa/entrega` of my fork;
 they are not part of the game code or the Pull Request.
 
-## 1. Team
+## 1. Student
 
 | Member | GitHub user | Group |
 |---|---|---|
@@ -114,7 +114,7 @@ on top of the controls and the HUD.
 
 ## 11. Individual log
 
-[docs/bitacora.md](docs/bitacora.md) — my commits, executed cases, peer review and AI tools used.
+[docs/bitacora.md](docs/bitacora.md) 
 
 ## 12. References
 
