@@ -18,9 +18,10 @@ dialog is drawn above the player sprite on **other players'** screens, so an unb
 malformed name covers their HUD and controls.
 
 - **v1 (first review):** cap the username at **16 characters** in the dialog.
-- **v2 (after the professor's feedback):** turn the cap into a complete validation with
-  three layers of defense — **dialog → server → client that draws the label** — and cover
-  the rules with unit tests.
+- **v2 (after the professor's feedback):** turn the cap into a complete validation of the
+  name (length, allowed characters, pasted text, old saved names), show it in the dialog,
+  apply the same limit to the names received from other players, and cover the rules with
+  unit tests.
 
 ## 3. Scope
 
@@ -37,15 +38,13 @@ malformed name covers their HUD and controls.
 - The `Jugador_XXXX` fallback name is kept when the field is left blank.
 - Remote players' names (`WorldMapMultiplayer.kt`) are capped at 16 with `…` before being drawn
   (protects against older clients that never had the limit).
-- Open-world multiplayer server (`Multiplayer/server.js`): `displayName` is sanitized and capped
-  at 16 before it is stored and broadcast.
 
 **Out of scope**
 
 - Name color / font customization (would require a new field in the network protocol and a
   server redeploy before it could be observed in-game).
 - Duplicate-name detection.
-- Zombie interiors and *Titulación por Combate* servers (`MultiplayerInteriores/`, `MultiplayerSF/`).
+- Changes to the multiplayer servers (`Multiplayer/`, `MultiplayerInteriores/`, `MultiplayerSF/`).
 
 ## 4. Traceability links
 
@@ -56,7 +55,7 @@ malformed name covers their HUD and controls.
 | Change branch | `fix/limit-multiplayer-username` |
 | Base SHA (v1) | [`7ed325393f82872c2be94ff2ada46948efa19152`](https://github.com/gabrielhuav/PolitecnicoOpenWorld/commit/7ed325393f82872c2be94ff2ada46948efa19152) |
 | Base SHA (v2, `main` merged into the branch) | [`f34b7ae4aa1e0bad170dafa76be35f0652b6f0cb`](https://github.com/gabrielhuav/PolitecnicoOpenWorld/commit/f34b7ae4aa1e0bad170dafa76be35f0652b6f0cb) |
-| **Final delivered SHA** | [`5b79caaf6a6a68b775fc719c7b5a7406145efd67`](https://github.com/DiegoRHA030427/PolitecnicoOpenWorldExam1/commit/5b79caaf6a6a68b775fc719c7b5a7406145efd67) |
+| **Final delivered SHA** | [`3207af6bb68f80d850191d7369765edc891c012c`](https://github.com/DiegoRHA030427/PolitecnicoOpenWorldExam1/commit/3207af6bb68f80d850191d7369765edc891c012c) |
 | App version | `1.0.0.18` |
 
 ### 4.1 Commits in the PR
@@ -68,10 +67,9 @@ malformed name covers their HUD and controls.
 | `8bc78e5a` | feat: add PlayerNameRules for multiplayer username validation | `PlayerNameRules.kt`, `PlayerNameRulesTest.kt` |
 | `6116d70d` | feat: validate username in the Connect to Server dialog | `MainMenuScreen.kt`, `strings.xml` (es / en) |
 | `3207af6b` | fix: cap remote player names before drawing them on the map | `WorldMapMultiplayer.kt` |
-| `5b79caaf` | fix(server): sanitize and cap displayName before relaying it | `Multiplayer/server.js` |
 
 Before starting v2, the 14 open PRs of the upstream repository were reviewed: none of them
-modifies `MainMenuScreen.kt`, `WorldMapMultiplayer.kt`, `Multiplayer/server.js` or the
+modifies `MainMenuScreen.kt`, `WorldMapMultiplayer.kt` or the
 `shared` `composeResources` strings, so the PR does not collide with other open PRs.
 
 ## 5. Test environment
@@ -102,7 +100,7 @@ v1 matrix with steps, expected/actual results and evidence: **[docs/pruebas.md](
 | CP-09 | Alternate: emoji in the name shows *Only letters, numbers, spaces and _ - .* and disables *Connect* | AC5 | v2 | ✅ Passed |
 | CP-10 | Regression: empty field shows `0/16`, *Connect* stays enabled, `Jugador_6765` is generated, saved and prefilled next time | R3 | v2 | ✅ Passed |
 | CP-11 | Regression: multiplayer session still connects after the change (Logcat) | R5 | v2 | ✅ Passed |
-| CP-12 | Unit tests: `PlayerNameRulesTest` (20 cases) + server `safeDisplayName` (8 cases) | R1, R2, R6 | v2 | ✅ Passed |
+| CP-12 | Unit tests: `PlayerNameRulesTest` (20 cases) | R1, R2 | v2 | ✅ Passed |
 
 **v2 test cases (detail)**
 
@@ -113,7 +111,7 @@ v1 matrix with steps, expected/actual results and evidence: **[docs/pruebas.md](
 | CP-09 | 1. With `Ju`, insert an emoji from the keyboard. | Red field, *Only letters, numbers, spaces and _ - .*, *Connect* greyed out. | As expected. | [v2_03](docs/evidencias/v2_03_caracter_invalido.png) |
 | CP-10 | 1. Delete everything. 2. Tap *Connect*. 3. Back to the menu → *Multiplayer* again. | Empty field shows `0/16` and *Connect* enabled; a `Jugador_XXXX` name is generated and prefilled the next time. | `Jugador_6765` generated and prefilled (`12/16`). | [v2_04](docs/evidencias/v2_04_vacio_respaldo.png), [v2_05](docs/evidencias/v2_05_respaldo_guardado.png) |
 | CP-11 | 1. Connect with the fallback name. 2. Check Logcat (`package:mine`). | Client joins the session. | `Multiplayer: Mi rol en esta zona ahora es Host: true`. The map stays on *Loading streets 25%* because `overpass-api.de` timed out (external service, also unrelated to the name). | [v2_06](docs/evidencias/v2_06_logcat_conectado.jpg) |
-| CP-12 | 1. Run `PlayerNameRulesTest` on the JVM. 2. Run the `safeDisplayName` assertions with Node. | All green. | 20/20 and 8/8 passed. | Section 8 |
+| CP-12 | 1. Run `PlayerNameRulesTest` on the JVM. 2. Run `.\gradlew.bat :shared:testAndroidHostTest`. | All green. | 20/20 passed; BUILD SUCCESSFUL. | Section 8 |
 
 ## 7. Evidence
 
@@ -163,9 +161,8 @@ Before v2 the dialog had no counter, no error message and *Connect* was always e
 |---|---|---|---|---|
 | Android Studio build + install | App compiles (`:app` + `:shared`) and installs on the emulator | `3207af6b` | ✅ *Gradle build finished in 3 m 4 s* · *Install successfully finished* | — |
 | `PlayerNameRulesTest` (JVM, JUnit 4) | Sanitizing, 16-char cap, min length, allowed characters, fallback, remote names with `…` | `8bc78e5a` | ✅ 20 / 20 passed | — |
-| `safeDisplayName` (Node) | Server cap at 16, line breaks/control chars removed, non-string → `''` | `5b79caaf` | ✅ 8 / 8 passed · `node --check server.js` OK | — |
-| detekt 1.23.8 (project config) | Static analysis on the changed Kotlin files | `5b79caaf` | ✅ 0 issues | — |
-| Local Gradle run (Windows, Gradle wrapper) | `.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest` and `.\gradlew.bat :shared:testAndroidHostTest` | `5b79caaf` | ✅ BUILD SUCCESSFUL (both runs) | — |
+| detekt 1.23.8 (project config) | Static analysis on the changed Kotlin files | `3207af6b` | ✅ 0 issues | — |
+| Local Gradle run (Windows, Gradle wrapper) | `.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest` and `.\gradlew.bat :shared:testAndroidHostTest` | `3207af6b` | ✅ BUILD SUCCESSFUL (both runs) | — |
 
 ## 9. Peer review
 
@@ -177,16 +174,14 @@ Before v2 the dialog had no counter, no error message and *Connect* was always e
 ## 10. Conclusions
 
 - v1 met its two acceptance criteria (valid names kept, input stops at 16).
-- v2 closes the two risks left open by v1 (*pasted text* and *old saved names*) and adds
-  validation in the three places the name passes through: dialog, server and the client
-  that draws it.
+- v2 closes the two risks left open by v1 (*pasted text* and *old saved names*), validates
+  length and allowed characters in the dialog, and also caps the names received from other
+  players before drawing them.
 - 12 of 12 test cases passed (6 from v1, 6 from v2); no defects found within scope.
 - **Recommendation:** merge.
 - **Remaining risks:**
-  - The `server.js` fix only takes effect after the server is redeployed on Render; until then the
-    client-side cap (`WorldMapMultiplayer.kt`) is what protects the players.
   - Two-letter names are no longer accepted (minimum 3).
-  - The zombie interiors and *Titulación por Combate* servers still relay the name as sent.
+  - The multiplayer servers still relay the name as sent; protection is on the client side.
   - Map loading depends on `overpass-api.de`; it timed out during this session (unrelated to the change).
 
 ## 11. Individual log
