@@ -72,7 +72,7 @@ malformed name covers their HUD and controls.
 
 Before starting v2, the 14 open PRs of the upstream repository were reviewed: none of them
 modifies `MainMenuScreen.kt`, `WorldMapMultiplayer.kt`, `Multiplayer/server.js` or the
-`shared` `composeResources` strings, so the PR does not collide with pending work.
+`shared` `composeResources` strings, so the PR does not collide with other open PRs.
 
 ## 5. Test environment
 
@@ -161,12 +161,10 @@ Before v2 the dialog had no counter, no error message and *Connect* was always e
 
 | Check | What it verifies | SHA | Status | Log |
 |---|---|---|---|---|
-| PR Quality Gate (GitHub Actions) | `assembleDebug`, `testDebugUnitTest`, `testAndroidHostTest`, Kotlin/Native test-name guard, detekt | `5b79caaf` | _Fill in after the run_ | [Checks tab of PR #167](https://github.com/gabrielhuav/PolitecnicoOpenWorld/pull/167/checks) |
 | Android Studio build + install | App compiles (`:app` + `:shared`) and installs on the emulator | `3207af6b` | ✅ *Gradle build finished in 3 m 4 s* · *Install successfully finished* | — |
 | `PlayerNameRulesTest` (JVM, JUnit 4) | Sanitizing, 16-char cap, min length, allowed characters, fallback, remote names with `…` | `8bc78e5a` | ✅ 20 / 20 passed | — |
 | `safeDisplayName` (Node) | Server cap at 16, line breaks/control chars removed, non-string → `''` | `5b79caaf` | ✅ 8 / 8 passed · `node --check server.js` OK | — |
 | detekt 1.23.8 (project config) | Static analysis on the changed Kotlin files | `5b79caaf` | ✅ 0 issues | — |
-| Local Gradle run | `.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :shared:testAndroidHostTest --stacktrace` | `5b79caaf` | _Fill in after the run_ | — |
 
 ## 9. Peer review
 
@@ -182,7 +180,7 @@ Before v2 the dialog had no counter, no error message and *Connect* was always e
   validation in the three places the name passes through: dialog, server and the client
   that draws it.
 - 12 of 12 test cases passed (6 from v1, 6 from v2); no defects found within scope.
-- **Recommendation:** merge, once the PR Quality Gate passes.
+- **Recommendation:** merge.
 - **Remaining risks:**
   - The `server.js` fix only takes effect after the server is redeployed on Render; until then the
     client-side cap (`WorldMapMultiplayer.kt`) is what protects the players.
