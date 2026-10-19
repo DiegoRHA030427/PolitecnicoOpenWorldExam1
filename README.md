@@ -165,6 +165,7 @@ Before v2 the dialog had no counter, no error message and *Connect* was always e
 | `PlayerNameRulesTest` (JVM, JUnit 4) | Sanitizing, 16-char cap, min length, allowed characters, fallback, remote names with `…` | `8bc78e5a` | ✅ 20 / 20 passed | — |
 | `safeDisplayName` (Node) | Server cap at 16, line breaks/control chars removed, non-string → `''` | `5b79caaf` | ✅ 8 / 8 passed · `node --check server.js` OK | — |
 | detekt 1.23.8 (project config) | Static analysis on the changed Kotlin files | `5b79caaf` | ✅ 0 issues | — |
+| Local Gradle run (Windows, Gradle wrapper) | `.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest` and `.\gradlew.bat :shared:testAndroidHostTest` | `5b79caaf` | ✅ BUILD SUCCESSFUL (both runs) | — |
 
 ## 9. Peer review
 
