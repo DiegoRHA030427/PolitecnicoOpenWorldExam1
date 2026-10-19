@@ -85,7 +85,7 @@ modifies `MainMenuScreen.kt`, `WorldMapMultiplayer.kt` or the
 
 ## 6. Test matrix
 
-v1 matrix with steps, expected/actual results and evidence: **[docs/pruebas.md](docs/pruebas.md)**
+Full matrix (v1 and v2) with author, date, SHA, configuration, steps, expected/actual results, evidence, defect and decision: **[docs/pruebas.md](docs/pruebas.md)**
 
 | Case | Type | Covers | Version | Status |
 |---|---|---|---|---|
@@ -95,12 +95,12 @@ v1 matrix with steps, expected/actual results and evidence: **[docs/pruebas.md](
 | CP-04 | Navigation / state (Back, rotation) | — | v1 | ✅ Passed |
 | CP-05 | Accessibility (max font size) | R4 | v1 | ✅ Passed |
 | CP-06 | Compatibility (emulator vs phone) | — | v1 | ✅ Passed |
-| CP-07 | Happy path: counter `12/16` with a valid saved name, *Connect* enabled | AC3 | v2 | ✅ Passed |
-| CP-08 | Boundary: `Jug` (3) is valid; `Ju` (2) shows *At least 3 characters* and disables *Connect* | AC4 | v2 | ✅ Passed |
+| CP-07 | Happy path: counter `12/16` with a valid saved name, *Connect* enabled | AC1, AC3 | v2 | ✅ Passed |
+| CP-08 | Boundary: `Jug` (3) is valid; `Ju` (2) shows *At least 3 characters* and disables *Connect* | AC4, R6 | v2 | ✅ Passed |
 | CP-09 | Alternate: emoji in the name shows *Only letters, numbers, spaces and _ - .* and disables *Connect* | AC5 | v2 | ✅ Passed |
-| CP-10 | Regression: empty field shows `0/16`, *Connect* stays enabled, `Jugador_6765` is generated, saved and prefilled next time | R3 | v2 | ✅ Passed |
+| CP-10 | Regression: empty field shows `0/16`, *Connect* stays enabled, `Jugador_6765` is generated, saved and prefilled next time | AC6, R3, R5 | v2 | ✅ Passed |
 | CP-11 | Regression: multiplayer session still connects after the change (Logcat) | R5 | v2 | ✅ Passed |
-| CP-12 | Unit tests: `PlayerNameRulesTest` (20 cases) | R1, R2 | v2 | ✅ Passed |
+| CP-12 | Unit tests: `PlayerNameRulesTest` (20 cases) | R1, R2, R6, R7 | v2 | ✅ Passed |
 
 **v2 test cases (detail)**
 
@@ -159,6 +159,7 @@ Before v2 the dialog had no counter, no error message and *Connect* was always e
 
 | Check | What it verifies | SHA | Status | Log |
 |---|---|---|---|---|
+| PR Quality Gate (GitHub Actions, upstream repo) | `assembleDebug`, `testDebugUnitTest`, `testAndroidHostTest`, Kotlin/Native test-name guard, detekt | `3207af6b` | ⏸️ `action_required` — GitHub does not run workflows from fork PRs until a maintainer of the upstream repository approves them; the same checks were run locally (rows below) | [Run 39329867282](https://github.com/gabrielhuav/PolitecnicoOpenWorld/actions/runs/39329867282) |
 | Android Studio build + install | App compiles (`:app` + `:shared`) and installs on the emulator | `3207af6b` | ✅ *Gradle build finished in 3 m 4 s* · *Install successfully finished* | — |
 | `PlayerNameRulesTest` (JVM, JUnit 4) | Sanitizing, 16-char cap, min length, allowed characters, fallback, remote names with `…` | `8bc78e5a` | ✅ 20 / 20 passed | — |
 | detekt 1.23.8 (project config) | Static analysis on the changed Kotlin files | `3207af6b` | ✅ 0 issues | — |
